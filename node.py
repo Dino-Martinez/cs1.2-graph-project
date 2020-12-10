@@ -17,6 +17,9 @@ class Node:
     def get_data(self):
         return self._data
 
+    def is_endpoint(self):
+        return len(self._edges) < 1
+
     def __eq__(self, other):
         if self.get_data() == other.get_data():
             return True

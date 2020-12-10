@@ -9,8 +9,8 @@ class Graph:
         self._edges = []
 
 
-    def add_node(self, node):
-        self._nodes.append(node)
+    def add_node(self, data):
+        self._nodes.append(Node(data))
 
     def add_edge(self, from_data, to_data):
         # build nodes, append to node list if necessary
@@ -34,16 +34,19 @@ class Graph:
         edge = from_node.add_edge(to_node)
         self._edges.append(edge)
 
-    def print_connections(self, data):
+    def prereqs(self, course, prerequisites=[]):
         try:
-            this_index = self._nodes.index(Node(data))
+            this_index = self._nodes.index(Node(course))
             this_node = self._nodes[this_index]
             edges = this_node.get_edges()
-            for _ in range(len(edges)):
-                print(f"{this_node._data} -> {edges[_]._to._data}")
-                #self.print_connections(edges[_]._to._data)
+            if len(edges) > 0:
+                for _ in range(len(edges)):
+                    if edges[_]._to._data not in prerequisites:
+                        prerequisites.append(edges[_]._to._data)
+                    self.prereqs(edges[_]._to._data, prerequisites)
         except:
-            print("The requested node doesn't exist")
+            print("The requested course doesn't exist")
+        return prerequisites
 
     def print_nodes(self):
         for _ in range(len(self._nodes)):
